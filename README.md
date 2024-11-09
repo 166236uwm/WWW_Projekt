@@ -2,9 +2,9 @@
 166236 i 166234
 
 
-##Zamysł projektu:
+## Zamysł projektu:
 Baza danych dla restauracji. Przewidujemy dwóch userów, admin i POS (Point of sales). Admin może dodawać i usuwać userów, produkty, receptury i generować raporty a POS dodawać transakcje. Zaawansowane endpointy to raport miesięczny transakcji i raport miesięczny zejścia poszczególnych produktów.
-##Planowane Endpointy:
+## Planowane Endpointy:
 transaction:
 	create
 	mscZestawienieTrn
