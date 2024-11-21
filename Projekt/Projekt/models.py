@@ -16,12 +16,19 @@ class User(models.Model):
 
 class Transaction(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
-    POS = models.IntegerField(blank=False)
+    POS = models.foreignKey('User', on_delete=models.DO_NOTHING)
     total_prize = models.FloatField(blank=False)
-    contents = models.CharField(max_length=500, blank=False)
+    contents = models.ForeignKey('Recipie', on_delete=models.DO_NOTHING)
+
+class Delivery(models.Model):
+    created_at = models.DateTimeField(default=timezone.now)
+    owner = models.ForeignKey('User', on_delete=models.DO_NOTHING)
+    total_prize = models.FloatField(blank=False)
+    contents = models.ForeignKey('Product', on_delete=models.DO_NOTHING)
 
 class Recipe(models.Model):
-    productID = models.IntegerField(blank=False)
+    productID = models.ForeignKey('Product', on_delete=models.DO_NOTHING)
+    prize = models.FloatField(blank=False)
 
 class Product(models.Model):
     name = models.CharField(max_length=100, blank=False)
