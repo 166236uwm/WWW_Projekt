@@ -43,11 +43,11 @@ class RecipeProduct(models.Model):
 
 #mamy GET i POST
 class Transaction(models.Model):
+
     POS = models.ForeignKey(Users, on_delete=models.CASCADE)
     total_prize = models.FloatField(default=0.0)  # Może być obliczane podczas zapisywania
     content = models.ManyToManyField(Recipe)  # Relacja do wielu przepisów
     created_at = models.DateTimeField(auto_now_add=True)
-
     def save(self, *args, **kwargs):
         # Obliczamy total_prize na podstawie wartości wszystkich przepisów powiązanych z transakcją
         self.total_prize = sum(recipe.value for recipe in self.content.all())
