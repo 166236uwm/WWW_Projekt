@@ -1,11 +1,13 @@
 from django.db import models
 
+#mamy GET i POST
 class Users(models.Model):
     username = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     role = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
 
+#mamy GET i POST
 class Product(models.Model):
     productName = models.CharField(max_length=100)
     pricePerUnit = models.FloatField()
@@ -13,6 +15,7 @@ class Product(models.Model):
     def __str__(self):
         return self.productName
 
+#mamy GET i POST
 class Recipe(models.Model):
     recipeName = models.CharField(max_length=100)
     quantity = models.PositiveIntegerField(default=1)  # Ilość w przepisie (jeśli planujesz to uwzględnić)
@@ -20,8 +23,11 @@ class Recipe(models.Model):
 
     @property
     def value(self):
-        # Suma wartości dla wszystkich powiązanych produktów w przepisie, uwzględniając ilość
-        return sum(product.pricePerUnit * self.recipeproduct_set.filter(recipe=self).first().quantity for product in self.products)
+        # Pobierz wszystkie produkty powiązane z przepisem i ich ilości
+        return sum(
+            recipe_product.product.pricePerUnit * recipe_product.quantity
+            for recipe_product in self.recipeproduct_set.all()
+        )
 
     def __str__(self):
         return self.recipeName
@@ -35,6 +41,7 @@ class RecipeProduct(models.Model):
     def __str__(self):
         return f"{self.product.productName} - {self.quantity}"
 
+#mamy GET i POST
 class Transaction(models.Model):
     POS = models.ForeignKey(Users, on_delete=models.CASCADE)
     total_prize = models.FloatField(default=0.0)  # Może być obliczane podczas zapisywania
