@@ -12,4 +12,5 @@ urlpatterns = [
     path('transactionAdd', views.addTransaction, name='transactionAdd'),
     path('deliveryGet', views.getDelivery, name='deliveryGet'),
     path('deliveryAdd', views.addDelivery, name='deliveryAdd'),
+    path('trnSummary', views.trnSummary, name='trnSummary'),
 ]
