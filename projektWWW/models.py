@@ -18,12 +18,11 @@ class Product(models.Model):
 #mamy GET i POST
 class Recipe(models.Model):
     recipeName = models.CharField(max_length=100)
-    quantity = models.PositiveIntegerField(default=1)  # Ilość w przepisie (jeśli planujesz to uwzględnić)
-    products = models.ManyToManyField(Product, through='RecipeProduct')  # Relacja wiele do wielu z produktem
+    quantity = models.PositiveIntegerField(default=1)
+    products = models.ManyToManyField(Product, through='RecipeProduct')
 
     @property
     def value(self):
-        # Pobierz wszystkie produkty powiązane z przepisem i ich ilości
         return sum(
             recipe_product.product.pricePerUnit * recipe_product.quantity
             for recipe_product in self.recipeproduct_set.all()
@@ -33,34 +32,37 @@ class Recipe(models.Model):
         return self.recipeName
 
 class RecipeProduct(models.Model):
-    """Tabela pomocnicza dla wielu produktów w przepisie."""
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)  # Ilość danego produktu w przepisie
+    quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return f"{self.product.productName} - {self.quantity}"
 
 #mamy GET i POST
 class Transaction(models.Model):
-
     POS = models.ForeignKey(Users, on_delete=models.CASCADE)
-    total_prize = models.FloatField(default=0.0)  # Może być obliczane podczas zapisywania
-    content = models.ManyToManyField(Recipe)  # Relacja do wielu przepisów
+    total_prize = models.FloatField(default=0.0)
+    content = models.ManyToManyField(Recipe)
     created_at = models.DateTimeField(auto_now_add=True)
+
     def save(self, *args, **kwargs):
-        # Obliczamy total_prize na podstawie wartości wszystkich przepisów powiązanych z transakcją
-        self.total_prize = sum(recipe.value for recipe in self.content.all())
+        is_new = self.pk is None
         super().save(*args, **kwargs)
+
+        if not is_new:
+            self.total_prize = sum(recipe.value for recipe in self.content.all())
+            super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Transaction {self.id}"
+
 
 class Delivery(models.Model):
     deliveryDate = models.DateTimeField(auto_now_add=True)
     recipient = models.ForeignKey(Users, on_delete=models.CASCADE)
     total_prize = models.FloatField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)  # Poprawka: musiałeś zmienić z `recipient` na `product`
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Delivery {self.id}"
