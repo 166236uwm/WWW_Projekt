@@ -8,12 +8,26 @@ from rest_framework import generics
 from .serializers import UserRegistrationSerializer
 from django.contrib.auth.models import User
 from rest_framework import status
+from projektWWW.decorators import role_required
 
 
 @api_view(['GET'])
+@role_required(['admin'])
 def getUsers(request):
     person = Users.objects.all()
     serializer = UsersSerializer(person, many=True)
+
+    def get(self, request):
+        # Sprawdzamy, czy użytkownik jest adminem
+        is_admin = request.user.is_staff or request.user.is_superuser
+
+        # Przygotowujemy odpowiedź
+        response_data = {
+            "username": request.user.username,
+            "email": request.user.email,
+            "is_admin": is_admin,  # Informacja, czy użytkownik jest administratorem
+        }
+        return Response(response_data)
     return Response(serializer.data)
 
 @api_view(['POST'])
