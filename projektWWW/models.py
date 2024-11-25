@@ -5,7 +5,12 @@ from django.db import models
 class Users(AbstractUser):
     username = models.CharField(max_length=100, unique = True)
     name = models.CharField(max_length=100)
-    role = models.CharField(max_length=100)
+    ROLE_CHOICES = (
+        ('manager', 'Manager'),
+        ('POS', 'pos'),
+        ("admin", "Admin"),
+    )
+    role = models.CharField(max_length=100, choices=ROLE_CHOICES, default='POS')
     created_at = models.DateTimeField(auto_now_add=True)
     password = models.CharField(max_length=128, null=True, blank=True)  # Allow NULL temporarily
 

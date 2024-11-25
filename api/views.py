@@ -12,7 +12,7 @@ from projektWWW.decorators import role_required
 
 
 @api_view(['GET'])
-@role_required(['admin'])
+@role_required(['admin', 'manager'])
 def getUsers(request):
     person = Users.objects.all()
     serializer = UsersSerializer(person, many=True)
@@ -31,6 +31,7 @@ def getUsers(request):
     return Response(serializer.data)
 
 @api_view(['POST'])
+@role_required(['admin', 'manager'])
 def addUser(request):
     serializer = UsersSerializer(data=request.data)
     if serializer.is_valid():
@@ -38,6 +39,7 @@ def addUser(request):
     return Response(serializer.data)
 
 @api_view(['DELETE'])
+@role_required(['admin', 'manager'])
 def deleteUser(request, pk):
     try:
         user = User.objects.get(pk=pk)
@@ -48,6 +50,7 @@ def deleteUser(request, pk):
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['PUT'])
+@role_required(['admin', 'manager'])
 def updateUser(request, pk):
     try:
         user = Users.objects.get(pk=pk)
@@ -67,12 +70,14 @@ class UserRegistrationView(generics.CreateAPIView):
         return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
+@role_required(['admin', 'manager'])
 def getProducts(request):
     product = Product.objects.all()
     serializer = ProductSerializer(product, many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
+@role_required(['admin', 'manager'])
 def addProducts(request):
     serializer = ProductSerializer(data=request.data)
     if serializer.is_valid():
@@ -80,6 +85,7 @@ def addProducts(request):
     return Response(serializer.data)
 
 @api_view(['DELETE'])
+@role_required(['admin', 'manager'])
 def deleteProduct(request, pk):
     try:
         product = Product.objects.get(pk=pk)
@@ -90,6 +96,7 @@ def deleteProduct(request, pk):
         return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['PUT'])
+@role_required(['admin', 'manager'])
 def updateProduct(request, pk):
     try:
         product = Product.objects.get(pk=pk)
@@ -102,12 +109,14 @@ def updateProduct(request, pk):
         return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
+@role_required(['admin', 'manager'])
 def getRecipe(request):
     recipe = Recipe.objects.all()
     serializer = RecipeSerializer(recipe, many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
+@role_required(['admin', 'manager'])
 def addRecipe(request):
     serializer = RecipeSerializer(data=request.data)
     if serializer.is_valid():
@@ -115,6 +124,7 @@ def addRecipe(request):
     return Response(serializer.data)
 
 @api_view(['DELETE'])
+@role_required(['admin', 'manager'])
 def deleteRecipe(request, pk):
     try:
         recipe = Recipe.objects.get(pk=pk)
@@ -124,6 +134,7 @@ def deleteRecipe(request, pk):
         return Response({"error": "Recipe not found"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['PUT'])
+@role_required(['admin', 'manager'])
 def updateRecipe(request, pk):
     try:
         recipe = Recipe.objects.get(pk=pk)
@@ -136,12 +147,14 @@ def updateRecipe(request, pk):
         return Response({"error": "Recipe not found"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
+@role_required(['admin', 'manager'])
 def getTransaction(request):
     transaction = Transaction.objects.all()
     serializer = TransactionSerializer(transaction, many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
+@role_required(['POS'])
 def addTransaction(request):
     serializer = TransactionSerializer(data=request.data)
     if serializer.is_valid():
@@ -149,6 +162,7 @@ def addTransaction(request):
     return Response(serializer.data)
 
 @api_view(['DELETE'])
+@role_required(['admin', 'manager'])
 def deleteTransaction(request, pk):
     try:
         transaction = Transaction.objects.get(pk=pk)
@@ -158,6 +172,7 @@ def deleteTransaction(request, pk):
         return Response({"error": "Transaction not found"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['PUT'])
+@role_required(['admin', 'manager'])
 def updateTransaction(request, pk):
     try:
         transaction = Transaction.objects.get(pk=pk)
@@ -170,12 +185,14 @@ def updateTransaction(request, pk):
         return Response({"error": "Transaction not found"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
+@role_required(['admin', 'manager'])
 def getDelivery(request):
     delivery = Delivery.objects.all()
     serializer = DeliverySerializer(delivery, many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
+@role_required(['admin', 'manager'])
 def addDelivery(request):
     serializer = DeliverySerializer(data=request.data)
     if serializer.is_valid():
@@ -183,6 +200,7 @@ def addDelivery(request):
     return Response(serializer.data)
 
 @api_view(['DELETE'])
+@role_required(['admin', 'manager'])
 def deleteDelivery(request, pk):
     try:
         delivery = Delivery.objects.get(pk=pk)
@@ -192,6 +210,7 @@ def deleteDelivery(request, pk):
         return Response({"error": "Delivery not found"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['PUT'])
+@role_required(['admin', 'manager'])
 def updateDelivery(request, pk):
     try:
         delivery = Delivery.objects.get(pk=pk)
@@ -205,6 +224,7 @@ def updateDelivery(request, pk):
 
 
 @api_view(['GET'])
+@role_required(['admin', 'manager'])
 def trnSummary(request):
     start_date_str = request.GET.get('start_date')
     end_date_str = request.GET.get('end_date')
@@ -234,6 +254,7 @@ def trnSummary(request):
     return Response(summary)
 
 @api_view(['GET'])
+@role_required(['admin', 'manager'])
 def productUsageSummary(request):
     start_date_str = request.GET.get('start_date')
     end_date_str = request.GET.get('end_date')
