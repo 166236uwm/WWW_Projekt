@@ -7,7 +7,10 @@ Baza danych dla restauracji. Przewidujemy dwóch userów, manager i POS (Point o
 ## Planowane Endpointy:
 ### transaction:
 	> create
-	> mscZestawienieTrn
+	> delete
+	> update
+	> get
+	> trnSummary
 ### user:
 	> create
 	> delete
@@ -18,13 +21,25 @@ Baza danych dla restauracji. Przewidujemy dwóch userów, manager i POS (Point o
 	> delete
 	> update
 	> get
-	> mscZestawienieZejścia
+	> productUsageSummary
 ### reciepie:
+	> create
+	> update
+	> delete
+	> get
+ ### reciepieProduct:
 	> create
 	> update
 	> delete
 	> get
  ### delivery:
  	> create
-  	> get
+	> delete
+	> update
+	> get
+ ### deliveryProduct:
+ 	> create
+	> delete
+	> update
+	> get
 ![alt text](https://github.com/166236uwm/WWW_Projekt/blob/main/DBdiagram.PNG?raw=true)
