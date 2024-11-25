@@ -7,6 +7,9 @@ class Users(models.Model):
     role = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.username} ({self.name})"
+
 #mamy GET i POST
 class Product(models.Model):
     productName = models.CharField(max_length=100)
@@ -62,7 +65,14 @@ class Delivery(models.Model):
     deliveryDate = models.DateTimeField(auto_now_add=True)
     recipient = models.ForeignKey(Users, on_delete=models.CASCADE)
     total_prize = models.FloatField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Delivery {self.id}"
+
+class DeliveryProduct(models.Model):
+    delivery = models.ForeignKey(Delivery, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.product.productName} - {self.quantity}"

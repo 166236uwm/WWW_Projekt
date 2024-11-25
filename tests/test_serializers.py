@@ -23,18 +23,15 @@ def test_recipe_serializer():
 @pytest.mark.django_db
 def test_delivery_serializer():
     user = Users.objects.create(name="test_user")
-    product = Product.objects.create(productName="test_product", pricePerUnit=50.0)
     data = {
         "recipient": user.id,
         "total_prize": 10.0,
-        "product": product.id
     }
     serializer = DeliverySerializer(data=data)
     assert serializer.is_valid(), serializer.errors
     instance = serializer.save()
     assert instance.recipient == user
     assert instance.total_prize == 10.0
-    assert instance.product == product
 
 @pytest.mark.django_db
 def test_transaction_serializer():
