@@ -1,11 +1,14 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 #mamy GET i POST
-class Users(models.Model):
-    username = models.CharField(max_length=100)
+class Users(AbstractUser):
+    username = models.CharField(max_length=100, unique = True)
     name = models.CharField(max_length=100)
     role = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
+    password = models.CharField(max_length=128, null=True, blank=True)  # Allow NULL temporarily
+
 
     def __str__(self):
         return f"{self.username} ({self.name})"

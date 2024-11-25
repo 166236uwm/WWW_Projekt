@@ -4,6 +4,11 @@ from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from api.serializers import  *
+from rest_framework import generics
+from .serializers import UserRegistrationSerializer
+from django.contrib.auth.models import User
+from rest_framework import status
+
 
 @api_view(['GET'])
 def getUsers(request):
@@ -21,11 +26,11 @@ def addUser(request):
 @api_view(['DELETE'])
 def deleteUser(request, pk):
     try:
-        user = Users.objects.get(pk=pk)
+        user = User.objects.get(pk=pk)
         user.delete()
         serializer = UsersSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    except Users.DoesNotExist:
+    except User.DoesNotExist:
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['PUT'])
@@ -39,6 +44,13 @@ def updateUser(request, pk):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Users.DoesNotExist:
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class UserRegistrationView(generics.CreateAPIView):
+    serializer_class = UserRegistrationSerializer
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
 def getProducts(request):
